@@ -4,6 +4,15 @@ from django.db import models
 User = get_user_model()
 
 
+class Group(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
 class Post(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(
@@ -15,6 +24,14 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         related_name='posts'
     )
+    group = models.ForeignKey(
+        Group,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        verbose_name='Группа',
+        help_text='Выберите группу'
+    )
     image = models.ImageField(
         upload_to='posts/',
         null=True,
@@ -25,19 +42,9 @@ class Post(models.Model):
         return self.text
 
     class Meta:
-        ordering = ['-pub_date']
         default_related_name = 'posts'
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
-
-
-class Group(models.Model):
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
-    description = models.TextField()
-
-    def __str__(self):
-        return self.title
 
 
 class Comment(models.Model):
@@ -84,4 +91,4 @@ class Follow(models.Model):
     class Meta:
         default_related_name = 'follower'
         verbose_name = 'Подписчик'
-        verbose_name_plural = 'Автор, на кого подписались'
+        verbose_name_plural = 'Автор, на которого подписались'
