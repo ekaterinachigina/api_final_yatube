@@ -22,7 +22,6 @@ class Post(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='posts'
     )
     group = models.ForeignKey(
         Group,
@@ -51,12 +50,10 @@ class Comment(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='comments'
     )
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name='comments'
     )
     text = models.TextField()
     created = models.DateTimeField(
@@ -89,6 +86,5 @@ class Follow(models.Model):
         return f'{self.user} {self.following}'
 
     class Meta:
-        default_related_name = 'follower'
         verbose_name = 'Подписчик'
         verbose_name_plural = 'Автор, на которого подписались'
